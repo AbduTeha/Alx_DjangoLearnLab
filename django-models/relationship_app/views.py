@@ -43,6 +43,7 @@ def logout_view(request):
     logout(request)
     return render(request, 'logout.html')
 
+#def register_view(request):
 def register_view(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -51,4 +52,4 @@ def register_view(request):
             return redirect('login')
     else:
         form = UserCreationForm()
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'relationship_app/register.html', {'form': form})
