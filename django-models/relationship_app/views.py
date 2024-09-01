@@ -53,3 +53,23 @@ def register_view(request):
     else:
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
+def check_admin(user):
+    return user.userprofile.role == 'Admin'
+
+def check_librarian(user):
+    return user.userprofile.role == 'Librarian'
+
+def check_member(user):
+    return user.userprofile.role == 'Member'
+
+@admin_view = user_passes_test(check_admin)
+def admin_view(request):
+    return render(request, 'admin.html')
+
+@librarian_view = user_passes_test(check_librarian)
+def librarian_view(request):
+    return render(request, 'librarian.html')
+
+@member_view = user_passes_test(check_member)
+def member_view(request):
+    return render(request, 'member.html')
