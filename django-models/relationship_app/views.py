@@ -6,7 +6,10 @@ from django.views import generic
 from .models import Library
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import user_passes_test
+
 
 def list_books(request):
     books = Book.objects.all()
@@ -62,14 +65,15 @@ def check_librarian(user):
 def check_member(user):
     return user.userprofile.role == 'Member'
 
-@admin_view = user_passes_test(check_admin)
+
+@user_passes_test(check_admin)
 def admin_view(request):
     return render(request, 'admin.html')
 
-@librarian_view = user_passes_test(check_librarian)
+@user_passes_test(check_librarian)
 def librarian_view(request):
     return render(request, 'librarian.html')
 
-@member_view = user_passes_test(check_member)
+@user_passes_test(check_member)
 def member_view(request):
     return render(request, 'member.html')
