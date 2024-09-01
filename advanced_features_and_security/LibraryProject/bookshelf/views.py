@@ -2,6 +2,21 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import permission_required
 from .models import Book
 from django.db.models import Q
+from .forms import ExampleForm
+
+def example_view(request):
+    if request.method == 'POST':
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            # Process the form data securely
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
+            # ...
+            return render(request, 'success.html')
+    else:
+        form = ExampleForm()
+    return render(request, 'form_example.html', {'form': form})
 
 def search_books(request):
     query = request.GET.get('q')
