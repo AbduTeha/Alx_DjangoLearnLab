@@ -1,7 +1,7 @@
 # relationship_app/views.py
 from django.shortcuts import render
 from .models import Book
-
+from django.views.generic.detail import DetailView
 from django.views import generic
 from .models import Library
 
