@@ -56,24 +56,33 @@ def register_view(request):
     else:
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
-def check_admin(user):
+def is_admin(user):
     return user.userprofile.role == 'Admin'
 
-def check_librarian(user):
+def is_librarian(user):
     return user.userprofile.role == 'Librarian'
 
-def check_member(user):
+def is_member(user):
     return user.userprofile.role == 'Member'
 
 
-@user_passes_test(check_admin)
+def is_admin(user):
+    return user.userprofile.role == 'Admin'
+
+def is_librarian(user):
+    return user.userprofile.role == 'Librarian'
+
+def is_member(user):
+    return user.userprofile.role == 'Member'
+
+@user_passes_test(is_admin)
 def admin_view(request):
-    return render(request, 'admin.html')
+    return render(request, 'admin_template.html')
 
-@user_passes_test(check_librarian)
+@user_passes_test(is_librarian)
 def librarian_view(request):
-    return render(request, 'librarian.html')
+    return render(request, 'librarian_template.html')
 
-@user_passes_test(check_member)
+@user_passes_test(is_member)
 def member_view(request):
-    return render(request, 'member.html')
+    return render(request, 'member_template.html')
