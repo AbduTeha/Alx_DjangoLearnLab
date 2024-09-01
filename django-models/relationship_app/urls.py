@@ -15,3 +15,10 @@ urlpatterns = [
     path('register/', views.register_view, name='register'),
     name='library_detail'),
 ]
+
+urlpatterns = [
+    path('books/', views.book_list, name='book_list'),
+    path('add_book/', views.add_book, name='add_book'),
+    path('edit_book/<pk>/', views.edit_book, name='edit_book'),
+    path('delete_book/<pk>/', views.delete_book, name='delete_book'),
+]
