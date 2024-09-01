@@ -48,7 +48,15 @@ INSTALLED_APPS = [
     'bookshelf',
     'relationship_app',
 ]
-
+SECURE_SSL_REDIRECT = True  # Redirect all non-HTTPS requests to HTTPS
+SECURE_HSTS_SECONDS = 31536000  # Instruct browsers to only access the site via HTTPS for one year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Include all subdomains in the HSTS policy
+SECURE_HSTS_PRELOAD = True  # Allow preloading
+SESSION_COOKIE_SECURE = True  # Ensure session cookies are only transmitted over HTTPS
+CSRF_COOKIE_SECURE = True  # Ensure CSRF cookies are only transmitted over HTTPS
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent browsers from MIME-sniffing a response away from the declared content-type
+SECURE_BROWSER_XSS_FILTER = True  # Enable the browser’s XSS filtering and help prevent cross-site scripting attacks
+X_FRAME_OPTIONS = 'DENY'  # Prevent your site from being framed and protect against clickjacking
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
