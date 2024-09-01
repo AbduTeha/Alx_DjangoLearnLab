@@ -57,6 +57,7 @@ CSRF_COOKIE_SECURE = True  # Ensure CSRF cookies are only transmitted over HTTPS
 SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent browsers from MIME-sniffing a response away from the declared content-type
 SECURE_BROWSER_XSS_FILTER = True  # Enable the browser’s XSS filtering and help prevent cross-site scripting attacks
 X_FRAME_OPTIONS = 'DENY'  # Prevent your site from being framed and protect against clickjacking
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
