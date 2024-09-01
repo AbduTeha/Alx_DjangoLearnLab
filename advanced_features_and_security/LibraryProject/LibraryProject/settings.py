@@ -25,8 +25,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-dv+hx(ehw-tv*ltozsruclvv&kgvj9zyraq7-io0saz^s3rbn#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
 
+# Enforce HTTPS-only cookies
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 ALLOWED_HOSTS = []
 
 
@@ -51,8 +57,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
-
+CSP_DEFAULT_SRC = ["'self'"]
+CSP_SCRIPT_SRC = ["'self'", "https://cdn.jsdelivr.net"]
+CSP_STYLE_SRC = ["'self'", "https://fonts.googleapis.com"]
+CSP_IMG_SRC = ["'self'", "https://example.com"]
 ROOT_URLCONF = 'LibraryProject.urls'
 TEMPLATES = [
     {
