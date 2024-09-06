@@ -6,6 +6,7 @@ from .models import Book
 from .serializers import BookSerializer
 from rest_framework.filters import SearchFilter, OrderingFilter
 from .filters import BookFilter, django_filters
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class BookListView(generics.ListAPIView):
