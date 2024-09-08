@@ -3,6 +3,8 @@ from rest_framework.test import APIClient
 from rest_framework import status
 from .models import Book
 from .serializers import BookSerializer
+from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 
 class BookAPITestCase(TestCase):
     def setUp(self):
@@ -57,3 +59,13 @@ class BookAPITestCase(TestCase):
         self.client.logout()
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+class BookAPITestCase(TestCase):
+    def setUp(self):
+        # Create a user and generate a token
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.token = Token.objects.create(user=self.user)
+
+        # Initialize the API client
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
