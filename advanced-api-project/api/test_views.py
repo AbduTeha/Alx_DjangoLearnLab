@@ -17,14 +17,15 @@ class BookAPITestCase(APITestCase):
         response = self.client.post(reverse('book-list'), self.book_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Book.objects.count(), 1)
-        self.assertEqual(Book.objects.get().title, self.book_data['title'])
+        self.assertEqual(response.data['title'], self.book_data['title'])
+        self.assertEqual(response.data['author'], self.book_data['author'])
 
     def test_update_book(self):
         book = Book.objects.create(**self.book_data)
         updated_data = {'title': 'Updated Title'}
         response = self.client.put(reverse('book-detail', args=[book.id]), updated_data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Book.objects.get().title, updated_data['title'])
+        self.assertEqual(response.data['title'], updated_data['title'])
 
     def test_delete_book(self):
         book = Book.objects.create(**self.book_data)
