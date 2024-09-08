@@ -43,13 +43,13 @@ class BookDeleteView(generics.DestroyAPIView):
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]
 
-
-
-
-
-class BookListView(generics.ListAPIView):
+class BookListView(generics.ListCreateAPIView):
     queryset = Book.objects.all()
-    filter_backends = [django_filters.rest_framework.DjangoFilterBackend, SearchFilter, OrderingFilter]
+    serializer_class = BookSerializer
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filterset_class = BookFilter
     search_fields = ['title', 'author']
     ordering_fields = ['title', 'publication_year']
+
+
+
