@@ -42,3 +42,10 @@ class BookAPITestCase(APITestCase):
         # Test that permission is required for CRUD operations
         response = self.client.post(reverse('book-list'), self.book_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+def setUp(self):
+    self.client = APIClient()
+    self.client.login(username='username', password='password')
+    self.book_data = {
+        'title': 'Test Book',
+        'author': 'Test Author',
+    }
