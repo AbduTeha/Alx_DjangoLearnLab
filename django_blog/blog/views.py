@@ -15,7 +15,15 @@ from .forms import CommentForm
 from django.shortcuts import render
 from django.db.models import Q
 from .models import Post
-
+def post_create(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('post_list')
+    else:
+        form = PostForm()
+    return render(request, 'post_form.html', {'form': form})
 def search_posts(request):
     query = request.GET.get('q')
     posts = Post.objects.filter(
