@@ -1,9 +1,13 @@
-from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from .forms import RegistrationForm, ProfileForm
 from django.contrib.auth.decorators import login_required
+
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from .models import Post
+from .forms import PostForm
 
 def login_view(request):
     if request.method == 'POST':
@@ -46,3 +50,37 @@ def profile_view(request):
         form = ProfileForm(instance=request.user)
     return render(request, 'profile.html', {'form': form})
 
+
+
+class PostListView(ListView):
+    model = Post
+    template_name = 'post_list.html'
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'post_detail.html'
+
+class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'post_form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'post_form.html'
+
+    def test_func(self):
+        return self.request.user == self.get_object().author
+
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Post
+    template_name = 'post_confirm_delete.html'
+    success_url = '/posts/'
+
+    def test_func(self):
+        return self.request.user == self.get_object().author
