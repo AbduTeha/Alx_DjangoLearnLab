@@ -2,10 +2,7 @@ from django import forms
 from .models import Post,Comment,Tag
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from taggit.forms import TagField
-from django import forms
-from .models import Post
-from taggit.forms import TagField
+from taggit.forms import TagField,TagWidget
 
 class PostForm(forms.ModelForm):
     tags = TagField(required=False)  # Ensure this line is correct
@@ -13,8 +10,6 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'content', 'tags']
-from django import forms
-from .models import Post, Tag
 
 class PostForm(forms.ModelForm):
     tags = forms.ModelMultipleChoiceField(
@@ -51,21 +46,15 @@ class CustomUserCreationForm(UserCreationForm):
         model = User
         fields = ('username', 'email', 'password1', 'password2')
 
-
-
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ('title', 'content')
 
-
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ('content',)
-from django import forms
-from taggit.forms import TagWidget
-from .models import Post
 
 class ContactForm(forms.Form):
     name = forms.CharField(max_length=100)
