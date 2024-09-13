@@ -2,7 +2,7 @@ from django import forms
 from .models import Post, Comment, Tag
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from taggit.forms import TagField, TagWidget
+from taggit.forms import TagField
 
 class PostForm(forms.ModelForm):
     tags = forms.ModelMultipleChoiceField(
@@ -31,4 +31,4 @@ class ContactForm(forms.Form):
     name = forms.CharField(max_length=100)
     email = forms.EmailField()
     message = forms.CharField(widget=forms.Textarea)
-    tags = forms.CharField(widget=TagWidget)
+    tags = forms.CharField()
