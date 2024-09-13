@@ -5,9 +5,12 @@ from .forms import RegistrationForm, ProfileForm
 from django.contrib.auth.decorators import login_required
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .models import Post
 from .forms import PostForm
+
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from .models import Post, Comment
+from .forms import CommentForm
 
 def login_view(request):
     if request.method == 'POST':
@@ -81,6 +84,38 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     template_name = 'post_confirm_delete.html'
     success_url = '/posts/'
+
+    def test_func(self):
+        return self.request.user == self.get_object().author
+
+
+
+class CommentListView(ListView):
+    model = Comment
+    template_name = 'comment_list.html'
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'comment_form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.post = Post.objects.get(pk=self.kwargs['post_pk'])
+        return super().form_valid(form)
+
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'comment_form.html'
+
+    def test_func(self):
+        return self.request.user == self.get_object().author
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+    template_name = 'comment_confirm_delete.html'
+    success_url = '/posts/<int:post_pk>/'
 
     def test_func(self):
         return self.request.user == self.get_object().author
