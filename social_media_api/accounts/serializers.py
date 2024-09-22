@@ -5,6 +5,11 @@ from django.contrib.auth import get_user_model
 from .models import CustomUser
 
 class UserSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(max_length=255)
+    email = serializers.EmailField(max_length=255)
+    bio = serializers.CharField(max_length=500, allow_blank=True)
+    profile_picture = serializers.ImageField(max_length=100, allow_empty_file=True)
+
     class Meta:
         model = CustomUser
         fields = ['id', 'username', 'email', 'bio', 'profile_picture']
