@@ -4,6 +4,8 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 from .models import CustomUser
 
+username = serializers.CharField(max_length=255)
+serializers.CharField(max_length=255)
 class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=255)
     email = serializers.EmailField(max_length=255)
