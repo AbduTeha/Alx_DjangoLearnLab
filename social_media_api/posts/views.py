@@ -20,3 +20,35 @@ class FeedView(generics.ListAPIView):
         followed_users = self.request.user.following.all()
         posts = Post.objects.filter(author__in=followed_users).order_by('-created_at')
         return posts
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from .models import Post, Like
+from .serializers import PostSerializer
+
+class LikeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, post_id):
+        post = Post.objects.get(id=post_id)
+        like, created = Like.objects.get_or_create(post=post, user=request.user)
+        if created:
+            # Generate notification for post author
+            notification = Notification(
+                recipient=post.author,
+                actor=request.user,
+                verb='liked',
+                target=post
+            )
+            notification.save()
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_200_OK)
+
+class UnlikeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, post_id):
+        post = Post.objects.get(id=post_id)
+        Like.objects.filter(post=post, user=request.user).delete()
+        return Response(status=status.HTTP_200_OK)
